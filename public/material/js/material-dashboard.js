@@ -164,18 +164,20 @@ md = {
     }
   },
 
-  showNotification: function(from, align) {
+  showNotification: function(from, align, color = "",message = "") {
     type = ['', 'info', 'danger', 'success', 'warning', 'rose', 'primary'];
-
-    color = Math.floor((Math.random() * 6) + 1);
-
+    if(color == ""){
+      color = Math.floor((Math.random() * 6) + 1);
+    }else{
+      color = color;
+    }
     $.notify({
-      icon: "add_alert",
-      message: "Welcome to <b>Material Dashboard Pro</b> - a beautiful admin panel for every web developer."
+      icon: "add_success",
+      message: message
 
     }, {
-      type: type[color],
-      timer: 3000,
+      type: color,
+      timer: 2000,
       placement: {
         from: from,
         align: align
