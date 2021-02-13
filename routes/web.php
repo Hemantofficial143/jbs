@@ -54,10 +54,19 @@ Route::group(['middleware' => 'auth'], function () {
 	})->name('upgrade');
 });
 
-Route::group(['middleware' => 'auth'], function () {
-	Route::resource('user', 'App\Http\Controllers\UserController', ['except' => ['show']]);
-	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
-	Route::put('profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
-	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
-});
+Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], function () {
+	Route::resource('user', 'UserController', ['except' => ['show']]);
+	Route::get('profile','ProfileController@edit')->name('profile.edit');
+	Route::put('profile','ProfileController@update')->name('profile.update');
+	Route::put('profile/password','ProfileController@password')->name('profile.password');
 
+
+  // Estimate Routes
+  Route::get('estimate', 'EstimateController@index')->name('estimate.index');
+  Route::post('estimate/store', 'EstimateController@store')->name('estimate.store');
+  Route::post('estimate/update', 'EstimateController@update')->name('estimate.update');
+  Route::post('estimate/get', 'EstimateController@get')->name('estimate.get');
+  Route::post('estimate/get/one', 'EstimateController@getOne')->name('estimate.get.one');
+  
+
+});
