@@ -64,6 +64,9 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
   // Estimate Routes
   Route::get('estimate', 'EstimateController@index')->name('estimate.index');
   Route::post('estimate/store', 'EstimateController@store')->name('estimate.store');
+  Route::post('estimate/update', 'EstimateController@update')->name('estimate.update');
+  Route::post('estimate/get', 'EstimateController@get')->name('estimate.get');
+  Route::post('estimate/get/one', 'EstimateController@getOne')->name('estimate.get.one');
   
 
 });

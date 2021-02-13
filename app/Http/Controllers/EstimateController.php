@@ -82,9 +82,22 @@ class EstimateController extends BaseEstimateController
      * @param  \App\Models\Estimate  $estimate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Estimate $estimate)
+    public function update(Request $request)
     {
-        //
+        $response = new ApiResponse();
+        $data = $request->all();
+        $request->validate([
+            "id" => "required",
+            "name" => "required",
+            "mobile" => "required",
+            "address" => "required"
+        ]);
+        $responseData = $this->updateEstimate($data);
+        if($responseData['IsSuccess']){
+            $response->IsSuccess = true;
+            $response->SuccessMessage = "Estimate Updated Successfully";
+        }
+        return ($this->getJsonResponse($response));
     }
 
     /**
@@ -97,4 +110,40 @@ class EstimateController extends BaseEstimateController
     {
         //
     }
+
+
+
+    public function get(){
+        $response = new ApiResponse();
+        $resData = $this->getEstimateData();
+        if($resData['IsSuccess']){
+            $response->IsSuccess = true;
+            $response->Data = $resData['data'];
+        }else{
+            $response->ErrorMessage = @trans('common.some_went_wrong');
+        }
+        return $this->getJsonResponse($response);
+    }
+
+
+
+    public function getOne(Request $request){
+        $response = new ApiResponse();
+        $id = decryptData($request->input('id'));
+        $resData = $this->getOneEstimateData($id);
+        if($resData['IsSuccess']){
+            $response->IsSuccess = true;
+            $response->Data = $resData['data'];
+        }else{
+            $response->ErrorMessage = "Error While Fetching Data";
+        }
+        return $this->getJsonResponse($response);
+        
+        
+    }
+
+
+
+
+
 }

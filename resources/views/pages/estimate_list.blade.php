@@ -9,7 +9,7 @@
           <div class="card-header card-header-primary">
             <h4 class="card-title ">Estimate</h4>
             <p class="card-category">Estimate List</p>
-            <a type="button" name="button" class="pull-right btn btn-success" data-toggle="modal" data-target="#addEstimateModal">+</a>
+            <a type="button" name="button" class="pull-right btn btn-success" id="addEstimateModalBtn" >+</a>
           </div>
 
           <div class="card-body">
@@ -35,35 +35,14 @@
                     Action
                   </th>
                 </thead>
-                <tbody>
-                  @if(isset($data) && count($data) > 0)
-                  @php
-                    $i = 1;    
-                  @endphp
-                    @foreach ($data as $estimate)
-                        <tr>
-                          <td>{{ $i }}</td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                        @php
-                          $i++;    
-                        @endphp
-                    @endforeach
-                  @else
-                  <tr>
-                    <td colspan="6">No Data Found</td>
-                  </tr>
-                  @endif
+                <tbody id="estimateData">
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-md-12">
+      {{-- <div class="col-md-12">
         <div class="card card-plain">
           <div class="card-header card-header-primary">
             <h4 class="card-title mt-0"> Table on Plain Background</h4>
@@ -197,7 +176,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
     </div>
   </div>
 </div>
@@ -213,6 +192,7 @@
       </div>
       <div class="modal-body">
         <form action="" method="post" id="add_estimate_form">
+          <input type="hidden" id="id" name="id" value="0">
         <div class="form-group">
           <label for="">Customer Name</label>
           <input type="text" name="name" id="name" class="form-control">
@@ -237,9 +217,88 @@
 </div>
 @push('js')
 <script>
+    function loadEstimateData(){
+      $.ajax({
+        headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+        url : "{{route('estimate.get')}}",
+        type : "POST",
+        success:function(res){
+          if(res.IsSuccess){
+            var html = "";
+            var i = 1;
+            if(res.Data.length > 0){
+                res.Data.forEach(estimate => {
+                  html += `<tr>`;
+                  html += `<td>${i}</td>`;
+                  html += `<td>${estimate.name}</td>`;
+                  html += `<td>${estimate.mobile}</td>`;
+                  html += `<td>${estimate.address}</td>`;
+                  html += `<td>${(estimate.email !== null)?estimate.email:'-'}</td>`;
+                  html += `<td>   
+                  <a type="button" class="btn btn-primary " onClick="updateEstimate($(this).data('id'))" data-id="${estimate.id}" >Edit</a>
+                  </td>`;
+                  html += `</tr>`;
+                  i++;
+                });
+            }else{
+              html += `<tr><td colspan="6">No Data Dound</td></tr>`;
+            }
+            $('#estimateData').html(html);
+          }else{    
+              md.showNotification('top','right','danger',res.ErrorMessage);
+          }
+        }
+      })
+    }
+
+    function clearData(){
+        $('#id').val(0);
+        $('#name').val("");
+        $('#mobile').val("");
+        $('#address').val("");
+    }
+
+    function updateEstimate(id){
+             $.ajax({
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              data : "id="+id,
+              url: "{{ route('estimate.get.one') }}",
+              type: "POST",
+              cache:false,
+              success:function(res){
+                if(res.IsSuccess){
+                    $('#id').val(res.Data.id);
+                    $('#name').val(res.Data.name);
+                    $('#mobile').val(res.Data.mobile);
+                    $('#address').val(res.Data.address);
+                    $('#addEstimateModal').modal('show');
+                }else{
+                  md.showNotification('top','right','danger',res.ErrorMessage);
+                }
+              }
+            });
+    }
+
     $(function(){
       
+      // load Data with AJAX
+      loadEstimateData();
 
+
+      // add new estimate
+      $('#addEstimateModalBtn').on('click',function(){
+        clearData();
+        $('#addEstimateModal').modal();
+      });
+
+    
+      // update estimate model
+      
+      
 
       // add estimate modal method start
       $('#add_estimate_form').validate({
@@ -263,7 +322,7 @@
           },
           submitHandler: function(form,event) {
             event.preventDefault();
-            var formData = $('#add_estimate_form').serialize();
+            var formData = $('#add_estimate_form').serialize(); 
             $.ajax({
               headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -276,6 +335,7 @@
                 if(res.IsSuccess){
                   $('#addEstimateModal').modal('hide');
                   md.showNotification('top','right','success',res.SuccessMessage);
+                  loadEstimateData();
                 }else{
 
                 }
@@ -284,7 +344,8 @@
           }
       })
       // add estimate modal method end
-    })
+    });
+  
 </script>
 @endpush
 
