@@ -237,7 +237,8 @@
                   html += `<td>${estimate.address}</td>`;
                   html += `<td>${(estimate.email !== null)?estimate.email:'-'}</td>`;
                   html += `<td>   
-                  <a type="button" class="btn btn-primary " onClick="updateEstimate($(this).data('id'))" data-id="${estimate.id}" >Edit</a>
+                  <a type="button" style="cursor:pointer;" onClick="updateEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">mode_edit</i></a>
+                  <a type="button" style="cursor:pointer;" onClick="deleteEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">delete_forever</i></a>
                   </td>`;
                   html += `</tr>`;
                   i++;
@@ -261,26 +262,46 @@
     }
 
     function updateEstimate(id){
-             $.ajax({
-              headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              },
-              data : "id="+id,
-              url: "{{ route('estimate.get.one') }}",
-              type: "POST",
-              cache:false,
-              success:function(res){
-                if(res.IsSuccess){
-                    $('#id').val(res.Data.id);
-                    $('#name').val(res.Data.name);
-                    $('#mobile').val(res.Data.mobile);
-                    $('#address').val(res.Data.address);
-                    $('#addEstimateModal').modal('show');
-                }else{
-                  md.showNotification('top','right','danger',res.ErrorMessage);
-                }
+      $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          data : "id="+id,
+          url: "{{ route('estimate.get.one') }}",
+          type: "POST",
+          cache:false,
+          success:function(res){
+            if(res.IsSuccess){
+                $('#id').val(res.Data.id);
+                $('#name').val(res.Data.name);
+                $('#mobile').val(res.Data.mobile);
+                $('#address').val(res.Data.address);
+                $('#addEstimateModal').modal('show');
+            }else{
+              md.showNotification('top','right','danger',res.ErrorMessage);
+            }
+          }
+      });
+    }
+
+    function deleteEstimate(id){
+      $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data : "id="+id,
+            url: "{{ route('estimate.delete') }}",
+            type: "POST",
+            cache:false,
+            success:function(res){
+              if(res.IsSuccess){
+                md.showNotification('top','right','danger',res.SuccessMessage);  
+                loadEstimateData();
+              }else{
+                md.showNotification('top','right','danger',res.ErrorMessage);
               }
-            });
+            }
+        })
     }
 
     $(function(){
