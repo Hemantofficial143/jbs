@@ -45,21 +45,29 @@ class BaseEstimateController extends Controller
 
     public function getOneEstimateData($id){    
         $this->response['IsSuccess'] = true;
-        $this->response['data'] = Estimate::where('id',$id)->select($this->estimateAlias)->first()->toArray();
+        $data = Estimate::where('id',$id)->select($this->estimateAlias)->first()->toArray();
+        $data['id'] = encryptData($data['id']);
+        $this->response['data'] = $data;
         return $this->response;
     }
 
     public function updateEstimate($data,$getData = false){
-        $updatedData = Estimate::where('id',$data['id'])->update([
+        $updatedData = Estimate::where('id',decryptData($data['id']))->update([
             'customer_name' => $data['name'],
             'customer_mobile' => $data['mobile'],
             'customer_address' => $data['address'],
-            'customer_email' => $data['email'],
+            'customer_email' => isset($data['email'])?$data['email']:NULL,
         ]);
         $this->response['IsSuccess'] = true;
         if($getData){
             $this->response['data'] = $updatedData;
         }
+        return $this->response;
+    }
+
+    public function deleteEstimateData($id){
+        Estimate::find(decryptData($id))->delete();
+        $this->response['IsSuccess'] = true;
         return $this->response;
     }
 

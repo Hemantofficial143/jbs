@@ -45,10 +45,19 @@ class EstimateController extends BaseEstimateController
             "mobile" => "required",
             "address" => "required"
         ]);
-        $responseData = $this->storeEstimate($data);
-        if($responseData['IsSuccess']){
-            $response->IsSuccess = true;
-            $response->SuccessMessage = "Estimate Addedd Successfully";
+        
+        if($data['id'] == "0"){
+            $responseData = $this->storeEstimate($data,true);
+            if($responseData['IsSuccess']){
+                $response->IsSuccess = true;
+                $response->SuccessMessage = "Estimate Addedd Successfully";
+            } 
+        }else{
+            $responseData = $this->updateEstimate($data);
+            if($responseData['IsSuccess']){
+                $response->IsSuccess = true;
+                $response->SuccessMessage = "Estimate Updated Successfully";
+            }
         }
         return ($this->getJsonResponse($response));
     }
@@ -82,23 +91,19 @@ class EstimateController extends BaseEstimateController
      * @param  \App\Models\Estimate  $estimate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    /*public function update($data)
     {
         $response = new ApiResponse();
-        $data = $request->all();
+        
         $request->validate([
             "id" => "required",
             "name" => "required",
             "mobile" => "required",
             "address" => "required"
         ]);
-        $responseData = $this->updateEstimate($data);
-        if($responseData['IsSuccess']){
-            $response->IsSuccess = true;
-            $response->SuccessMessage = "Estimate Updated Successfully";
-        }
+        
         return ($this->getJsonResponse($response));
-    }
+    }*/
 
     /**
      * Remove the specified resource from storage.
@@ -106,9 +111,17 @@ class EstimateController extends BaseEstimateController
      * @param  \App\Models\Estimate  $estimate
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Estimate $estimate)
+    public function destroy(Request $request)
     {
-        //
+        $response = new ApiResponse();
+        $resData = $this->deleteEstimateData($request->id);
+        if($resData['IsSuccess']){
+            $response->IsSuccess = true;
+            $response->SuccessMessage= "Estimate Deleted Succesfully";
+        }else{
+            $response->ErrorMessage = @trans('common.some_went_wrong');
+        }
+        return $this->getJsonResponse($response);
     }
 
 
