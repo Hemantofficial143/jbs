@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'estimate', 'titlePage' => __('Estimate'),'title' => 'Estimate'])
+@extends('layouts.app', ['activePage' => 'estimate', 'titlePage' => @trans('titles.estimate_items'),'title' => @trans('titles.estimate_items')])
 
 @section('content')
 <div class="content">
@@ -7,8 +7,8 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-header card-header-primary">
-            <h4 class="card-title ">Estimate</h4>
-            <p class="card-category">Estimate List</p>
+            <h4 class="card-title ">@lang('titles.estimate_items')</h4>
+            <p class="card-category">@lang('titles.estimate_items') List</p>
             <a type="button" name="button" class="pull-right btn btn-success" id="addEstimateModalBtn" >+</a>
           </div>
 
@@ -20,22 +20,22 @@
                     Sr
                   </th>
                   <th>
-                    Name
+                    Item
                   </th>
                   <th>
-                    Mobile
+                    Price
                   </th>
                   <th>
-                    Address
+                    Maap
                   </th>
                   <th>
-                    Email
+                    Description
                   </th>
                   <th>
-                    Action
+                    Actions
                   </th>
                 </thead>
-                <tbody id="estimateData">
+                <tbody id="estimateItemData">
                 </tbody>
               </table>
             </div>
@@ -217,38 +217,42 @@
 </div>
 @push('js')
 <script>
-    function loadEstimateData(){
-      
+    function loadEstimateItemData(){
+        
+    var id = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);      
+    console.log(id);
       $.ajax({
         headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
-        url : "{{route('estimate.get')}}",
+        url : "{{route('estimate.items.get')}}",
+        data : {id:id},
         type : "POST",
         success:function(res){
           if(res.IsSuccess){
             var html = "";
             var i = 1;
             if(res.Data.length > 0){
-                res.Data.forEach(estimate => {
+                res.Data.forEach(estimateItem => {
                   html += `<tr>`;
                   html += `<td>${i}</td>`;
-                  html += `<td>${estimate.name}</td>`;
-                  html += `<td>${estimate.mobile}</td>`;
-                  html += `<td>${estimate.address}</td>`;
-                  html += `<td>${(estimate.email !== null)?estimate.email:'-'}</td>`;
-                  html += `<td>   
-                  <a type="button" style="cursor:pointer;" href="/estimate/item/${estimate.id}"  ><i class="material-icons">mode_edit</i></a>
-                  <a type="button" style="cursor:pointer;" onClick="updateEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">mode_edit</i></a>
-                  <a type="button" style="cursor:pointer;" onClick="deleteEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">delete_forever</i></a>
-                  </td>`;
+                  html += `<td>${estimateItem.name}</td>`;
+                  html += `<td>${estimateItem.price}</td>`;
+                  html += `<td>${estimateItem.maap}</td>`;
+                  html += `<td>${(estimateItem.description !== null)?estimateItem.description:'-'}</td>`;
+                //   html += `<td>   
+                //   <a type="button" style="cursor:pointer;" href="/estimate/item/${estimate.id}"  ><i class="material-icons">mode_edit</i></a>
+                //   <a type="button" style="cursor:pointer;" onClick="updateEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">mode_edit</i></a>
+                //   <a type="button" style="cursor:pointer;" onClick="deleteEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">delete_forever</i></a>
+                //   </td>`;
                   html += `</tr>`;
                   i++;
                 });
             }else{
-              html += `<tr><td colspan="6">No Data Dound</td></tr>`;
+                md.showNotification('top','right','danger',"No Data Found");
+                html += `<tr><td colspan="6">No Data Dound</td></tr>`;
             }
-            $('#estimateData').html(html);
+            $('#estimateItemData').html(html);
           }else{    
               md.showNotification('top','right','danger',res.ErrorMessage);
           }
@@ -256,67 +260,67 @@
       })
     }
 
-    function clearData(){
-        $('#id').val(0);
-        $('#name').val("");
-        $('#mobile').val("");
-        $('#address').val("");
-    }
+    // function clearData(){
+    //     $('#id').val(0);
+    //     $('#name').val("");
+    //     $('#mobile').val("");
+    //     $('#address').val("");
+    // }
 
-    function updateEstimate(id){
-      $.ajax({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          },
-          data : "id="+id,
-          url: "{{ route('estimate.get.one') }}",
-          type: "POST",
-          cache:false,
-          success:function(res){
-            if(res.IsSuccess){
-                $('#id').val(res.Data.id);
-                $('#name').val(res.Data.name);
-                $('#mobile').val(res.Data.mobile);
-                $('#address').val(res.Data.address);
-                $('#addEstimateModal').modal('show');
-            }else{
-              md.showNotification('top','right','danger',res.ErrorMessage);
-            }
-          }
-      });
-    }
+    // function updateEstimate(id){
+    //   $.ajax({
+    //       headers: {
+    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //       },
+    //       data : "id="+id,
+    //       url: "{{ route('estimate.get.one') }}",
+    //       type: "POST",
+    //       cache:false,
+    //       success:function(res){
+    //         if(res.IsSuccess){
+    //             $('#id').val(res.Data.id);
+    //             $('#name').val(res.Data.name);
+    //             $('#mobile').val(res.Data.mobile);
+    //             $('#address').val(res.Data.address);
+    //             $('#addEstimateModal').modal('show');
+    //         }else{
+    //           md.showNotification('top','right','danger',res.ErrorMessage);
+    //         }
+    //       }
+    //   });
+    // }
 
-    function deleteEstimate(id){
-      $.ajax({
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data : "id="+id,
-            url: "{{ route('estimate.delete') }}",
-            type: "POST",
-            cache:false,
-            success:function(res){
-              if(res.IsSuccess){
-                md.showNotification('top','right','danger',res.SuccessMessage);  
-                loadEstimateData();
-              }else{
-                md.showNotification('top','right','danger',res.ErrorMessage);
-              }
-            }
-        })
-    }
+    // function deleteEstimate(id){
+    //   $.ajax({
+    //         headers: {
+    //           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         data : "id="+id,
+    //         url: "{{ route('estimate.delete') }}",
+    //         type: "POST",
+    //         cache:false,
+    //         success:function(res){
+    //           if(res.IsSuccess){
+    //             md.showNotification('top','right','danger',res.SuccessMessage);  
+    //             loadEstimateData();
+    //           }else{
+    //             md.showNotification('top','right','danger',res.ErrorMessage);
+    //           }
+    //         }
+    //     })
+    // }
 
     $(function(){
-      
+        
       // load Data with AJAX
-      loadEstimateData();
+      loadEstimateItemData();
 
 
       // add new estimate
-      $('#addEstimateModalBtn').on('click',function(){
-        clearData();
-        $('#addEstimateModal').modal();
-      });
+    //   $('#addEstimateModalBtn').on('click',function(){
+    //     clearData();
+    //     $('#addEstimateModal').modal();
+    //   });
 
     
       // update estimate model
@@ -324,48 +328,48 @@
       
 
       // add estimate modal method start
-      $('#add_estimate_form').validate({
-          rules: {
-            name: "required",
-            mobile: {
-              required :true,
-              number: true,
-		          minlength: 10,
-		          maxlength: 10 
-            },
-            address : "required",
-          },
-          messages: {
-            name: "Please enter customer name",
-            mobile: {
-              required : "Please enter customer mobile",
-              number : "Number Only"
-            },
-            address:  "Please enter customer address",
-          },
-          submitHandler: function(form,event) {
-            event.preventDefault();
-            var formData = $('#add_estimate_form').serialize(); 
-            $.ajax({
-              headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              },
-              data : formData,
-              url: "{{ route('estimate.store') }}",
-              type: "POST",
-              cache:false,
-              success:function(res){
-                if(res.IsSuccess){
-                  $('#addEstimateModal').modal('hide');
-                  md.showNotification('top','right','success',res.SuccessMessage);
-                  loadEstimateData();
-                }else{
+    //   $('#add_estimate_form').validate({
+    //       rules: {
+    //         name: "required",
+    //         mobile: {
+    //           required :true,
+    //           number: true,
+	// 	          minlength: 10,
+	// 	          maxlength: 10 
+    //         },
+    //         address : "required",
+    //       },
+    //       messages: {
+    //         name: "Please enter customer name",
+    //         mobile: {
+    //           required : "Please enter customer mobile",
+    //           number : "Number Only"
+    //         },
+    //         address:  "Please enter customer address",
+    //       },
+    //       submitHandler: function(form,event) {
+    //         event.preventDefault();
+    //         var formData = $('#add_estimate_form').serialize(); 
+    //         $.ajax({
+    //           headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //           },
+    //           data : formData,
+    //           url: "{{ route('estimate.store') }}",
+    //           type: "POST",
+    //           cache:false,
+    //           success:function(res){
+    //             if(res.IsSuccess){
+    //               $('#addEstimateModal').modal('hide');
+    //               md.showNotification('top','right','success',res.SuccessMessage);
+    //               loadEstimateData();
+    //             }else{
 
-                }
-              }
-            });
-          }
-      })
+    //             }
+    //           }
+    //         });
+    //       }
+    //   })
       // add estimate modal method end
     });
   

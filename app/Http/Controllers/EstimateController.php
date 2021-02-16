@@ -156,6 +156,9 @@ class EstimateController extends BaseEstimateController
     }
 
 
+    public function addEstimateItem(){
+        return "hello";
+    }
 
 
 
