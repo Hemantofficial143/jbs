@@ -68,8 +68,13 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
   Route::post('estimate/get', 'EstimateController@get')->name('estimate.get');
   Route::post('estimate/get/one', 'EstimateController@getOne')->name('estimate.get.one');
   Route::post('estimate/delete', 'EstimateController@destroy')->name('estimate.delete');
+  
+
+
+  //estimate item routes
   Route::get('estimate/item/{id}','EstimateItemController@index')->name('estimate.item.add');
   Route::post('estimate/item/get','EstimateItemController@getAllEstimateItemData')->name('estimate.items.get');
+  Route::post('estimate/item/store','EstimateItemController@store')->name('estimate.item.store');
   
 
 });

@@ -32,4 +32,23 @@ class BaseEstimateItemController extends Controller
         }
         return $this->response;
     }
+
+    public function storeEstimateItem($data,$returnData = false){
+        $insert = EstimateItem::create([
+            'name' => $data['name'],
+            'price' => $data['price'],
+            'description' => ($data['description'] != "")?$data['description']:NULL,
+            'user_id' => $this->getAuthUserID(),
+            'estimate_id' => decryptData($data['estimate_id']),
+            'maap_id' => $data['maap'],
+        ]);
+        if($insert){
+            $this->response['IsSuccess'] = true;
+            if($returnData == true){
+                $this->response['data'] = $insert;
+            }
+        }
+        return $this->response;
+    }
+
 }

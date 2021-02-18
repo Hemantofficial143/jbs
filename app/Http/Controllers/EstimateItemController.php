@@ -6,6 +6,7 @@ use App\Models\EstimateItem;
 use Illuminate\Http\Request;
 use App\Infrastructure\ApiResponse;
 use App\Http\Controllers\base\BaseEstimateItemController;
+use App\Models\Maap;
 
 class EstimateItemController extends BaseEstimateItemController
 {
@@ -16,7 +17,8 @@ class EstimateItemController extends BaseEstimateItemController
      */
     public function index()
     {
-        return view('pages.estimate_items');
+        $maap = Maap::all()->toArray();
+        return view('pages.estimate_items',['maap' => $maap]);
     }
 
     /**
@@ -37,7 +39,22 @@ class EstimateItemController extends BaseEstimateItemController
      */
     public function store(Request $request)
     {
-        //
+        $response = new ApiResponse();
+        $data = $request->all();
+        if($data['id'] == "0"){
+            $responseData = $this->storeEstimateItem($data,true);
+            if($responseData['IsSuccess']){
+                $response->IsSuccess = true;
+                $response->SuccessMessage = "Estimate Item Addedd Successfully";
+            } 
+        }else{
+            // $responseData = $this->updateEstimate($data);
+            // if($responseData['IsSuccess']){
+            //     $response->IsSuccess = true;
+            //     $response->SuccessMessage = "Estimate Updated Successfully";
+            // }
+        }
+        return $this->getJsonResponse($response);
     }
 
     /**
