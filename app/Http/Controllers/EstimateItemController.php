@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EstimateItem;
 use Illuminate\Http\Request;
 use App\Infrastructure\ApiResponse;
-use App\Http\Controllers\base\BaseEstimateItemController;
+use App\Http\Controllers\Base\BaseEstimateItemController;
 use App\Models\Maap;
 
 class EstimateItemController extends BaseEstimateItemController

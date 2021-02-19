@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\base\BaseEstimateController;
+use App\Http\Controllers\Base\BaseEstimateController;
 use App\Infrastructure\ApiResponse;
 use App\Models\Estimate;
 use Illuminate\Http\Request;
