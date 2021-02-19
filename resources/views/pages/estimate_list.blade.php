@@ -238,9 +238,10 @@
                   html += `<td>${estimate.address}</td>`;
                   html += `<td>${(estimate.email !== null)?estimate.email:'-'}</td>`;
                   html += `<td>   
-                  <a type="button" style="cursor:pointer;" href="/estimate/item/${estimate.id}"  ><i class="material-icons">mode_edit</i></a>
-                  <a type="button" style="cursor:pointer;" onClick="updateEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">mode_edit</i></a>
-                  <a type="button" style="cursor:pointer;" onClick="deleteEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">delete_forever</i></a>
+                  <a type="button" class="p-2" style="cursor:pointer;" data-id="${estimate.id}"><i class="material-icons">picture_as_pdf</i></a>
+                  <a type="button" class="p-2" style="cursor:pointer;" href="/estimate/item/${estimate.id}"  ><i class="material-icons">keyboard_arrow_right</i></a>
+                  <a type="button" class="p-2" style="cursor:pointer;" onClick="updateEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">mode_edit</i></a>
+                  <a type="button" class="p-2" style="cursor:pointer;" onClick="deleteEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">delete_forever</i></a>
                   </td>`;
                   html += `</tr>`;
                   i++;

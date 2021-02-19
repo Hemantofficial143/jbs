@@ -21,6 +21,7 @@ class CreateEstimatesTable extends Migration
             $table->string('customer_mobile',20);
             $table->text('customer_address');
             $table->string('customer_email',70)->nullable();
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }

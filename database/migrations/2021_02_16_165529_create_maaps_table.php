@@ -18,6 +18,7 @@ class CreateMaapsTable extends Migration
             $table->string('name');
             $table->string('code',30);
             $table->string('status')->default(1);
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }

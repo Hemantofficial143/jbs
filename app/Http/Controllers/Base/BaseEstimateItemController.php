@@ -51,4 +51,26 @@ class BaseEstimateItemController extends Controller
         return $this->response;
     }
 
+    public function updateEstimateItem($data,$returnData = false){
+        $updatedData = EstimateItem::where('id',decryptData($data['id']))->update([
+            'name' => $data['name'],
+            'price' => $data['price'],
+            'description' => ($data['description'] != "")?$data['description']:NULL,
+            'maap_id' =>$data['maap']
+        ]);
+        $this->response['IsSuccess'] = true;
+        if($returnData == true){
+            $this->response['data'] = $updatedData;
+        }
+        return $this->response;
+    }
+
+    public function getOneEstimateItemData($id){
+        $this->response['IsSuccess'] = true;
+        $data = EstimateItem::where('id',decryptData($id))->first()->toArray();
+        $data['id'] = encryptData($data['id']);
+        $this->response['data'] = $data;
+        return $this->response;
+    }
+
 }

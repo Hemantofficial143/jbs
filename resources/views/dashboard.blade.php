@@ -10,9 +10,9 @@
               <div class="card-icon">
                 <i class="material-icons">content_copy</i>
               </div>
-              <p class="card-category">Used Space</p>
-              <h3 class="card-title">49/50
-                <small>GB</small>
+              <p class="card-category">Total Estimates</p>
+              <h3 class="card-title">{{ ($count['estimates'])?$count['estimates']:0 }}
+                <small></small>
               </h3>
             </div>
             <div class="card-footer">

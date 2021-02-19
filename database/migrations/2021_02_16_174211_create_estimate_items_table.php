@@ -24,6 +24,7 @@ class CreateEstimateItemsTable extends Migration
             $table->foreign('estimate_id')->references('id')->on('estimates');
             $table->unsignedBigInteger('maap_id');
             $table->foreign('maap_id')->references('id')->on('maaps');
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }

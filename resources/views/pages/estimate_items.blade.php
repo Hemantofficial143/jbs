@@ -122,6 +122,9 @@
                   html += `<td>${estimateItem.price}</td>`;
                   html += `<td>${estimateItem.maap}</td>`;
                   html += `<td>${(estimateItem.description !== null)?estimateItem.description:'-'}</td>`;
+                  html += `<td>
+                  <a style="cursor:pointer;" onClick="updateEstimateItem($(this).data('id'))" data-id="${estimateItem.id}">Edit</a>
+                  </td>`;
                   html += `</tr>`;
                   i++;
                 });
@@ -137,35 +140,30 @@
       })
     }
 
-    // function clearData(){
-    //     $('#id').val(0);
-    //     $('#name').val("");
-    //     $('#mobile').val("");
-    //     $('#address').val("");
-    // }
-
-    // function updateEstimate(id){
-    //   $.ajax({
-    //       headers: {
-    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //       },
-    //       data : "id="+id,
-    //       url: "{{ route('estimate.get.one') }}",
-    //       type: "POST",
-    //       cache:false,
-    //       success:function(res){
-    //         if(res.IsSuccess){
-    //             $('#id').val(res.Data.id);
-    //             $('#name').val(res.Data.name);
-    //             $('#mobile').val(res.Data.mobile);
-    //             $('#address').val(res.Data.address);
-    //             $('#addEstimateModal').modal('show');
-    //         }else{
-    //           md.showNotification('top','right','danger',res.ErrorMessage);
-    //         }
-    //       }
-    //   });
-    // }
+    function updateEstimateItem(id){
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data : "id="+id,
+        url: "{{ route('estimate.item.get.one') }}",
+        type: "POST",
+        cache:false,
+        success:function(res){
+          if(res.IsSuccess){
+              $('#id').val(res.Data.id);
+              $('#name').val(res.Data.name);
+              $('#price').val(res.Data.price);
+              $('#maap').val(res.Data.maap_id);
+              $('#description').val(res.Data.description);
+              $('#exampleModalLabel').html("Update Estimate Item");
+              $('#addEstimateItemModal').modal('show');
+          }else{
+            md.showNotification('top','right','danger',res.ErrorMessage);
+          }
+        }
+      });
+    }
 
     // function deleteEstimate(id){
     //   $.ajax({
@@ -192,17 +190,12 @@
       // load Data with AJAX
       loadEstimateItemData();
 
-
       // add new estimate
       $('#addEstimateItemModalBtn').on('click',function(){
         clearData();
+        $('#exampleModalLabel').html("Add Estimate Item");
         $('#addEstimateItemModal').modal();
       });
-
-    
-      // update estimate model
-      
-      
 
       //add estimate item modal method start
       $('#add_estimate_item_form').validate({

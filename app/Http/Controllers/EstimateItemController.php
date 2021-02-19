@@ -48,11 +48,11 @@ class EstimateItemController extends BaseEstimateItemController
                 $response->SuccessMessage = "Estimate Item Addedd Successfully";
             } 
         }else{
-            // $responseData = $this->updateEstimate($data);
-            // if($responseData['IsSuccess']){
-            //     $response->IsSuccess = true;
-            //     $response->SuccessMessage = "Estimate Updated Successfully";
-            // }
+            $responseData = $this->updateEstimateItem($data);
+            if($responseData['IsSuccess']){
+                $response->IsSuccess = true;
+                $response->SuccessMessage = "Estimate Item Updated Successfully";
+            }
         }
         return $this->getJsonResponse($response);
     }
@@ -114,5 +114,19 @@ class EstimateItemController extends BaseEstimateItemController
         }
         return $this->getJsonResponse($response);
     }
+
+    public function getOne(Request $request){
+        $response = new ApiResponse();
+        $id = $request->input('id');
+        $resData = $this->getOneEstimateItemData($id);
+        if($resData['IsSuccess']){
+            $response->IsSuccess = true;
+            $response->Data = $resData['data'];
+        }else{
+            $response->ErrorMessage = "Error While Fetching Data";
+        }
+        return $this->getJsonResponse($response);
+    }
+
 
 }
