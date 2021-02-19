@@ -47,7 +47,7 @@ class EstimateController extends BaseEstimateController
         ]);
         
         if($data['id'] == "0"){
-            $responseData = $this->storeEstimate($data,true);
+            $responseData = $this->storeEstimate($data);
             if($responseData['IsSuccess']){
                 $response->IsSuccess = true;
                 $response->SuccessMessage = "Estimate Addedd Successfully";
@@ -156,6 +156,9 @@ class EstimateController extends BaseEstimateController
     }
 
 
+    public function addEstimateItem(){
+        return "hello";
+    }
 
 
 

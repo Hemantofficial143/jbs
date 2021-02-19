@@ -47,6 +47,26 @@
           </ul>
         </div>
       </li>
+      @if(Auth::user()->user_type == 0)
+      <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
+        <a class="nav-link" data-toggle="collapse" href="#management" aria-expanded="true">
+          <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i>
+          <p>{{ __('Manage ').config('app.name') }}
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse show" id="management">
+          <ul class="nav">
+            <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
+              <a class="nav-link" >
+                <span class="sidebar-mini"> MP </span>
+                <span class="sidebar-normal">{{ __('Maap') }} </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      @endif
       <li class="nav-item{{ $activePage == 'table' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('table') }}">
           <i class="material-icons">content_paste</i>

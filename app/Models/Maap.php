@@ -6,16 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Estimate extends Model
+class Maap extends Model
 {
-
     use HasFactory;
     use SoftDeletes;
-    
-    protected $fillable = [
-        'customer_name',
-        'customer_mobile',
-        'customer_address',
-        'user_id'
-    ];
 }
