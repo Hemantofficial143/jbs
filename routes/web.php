@@ -23,6 +23,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
+Route::get('/login/google',[App\Http\Controllers\Auth\LoginController::class,'loginGoogle'])->name('google.login');
+Route::get('/login/callback',[App\Http\Controllers\Auth\LoginController::class,'loginGoogleCallback']);
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('table-list', function () {
