@@ -22,7 +22,7 @@ class BaseEstimateItemController extends Controller
                 ->rightJoin('estimates','estimates.id','=','estimate_items.estimate_id')
                 ->join('maaps','maaps.id','=','estimate_items.maap_id')
                 ->where('estimates.id',$id)->where('estimates.user_id',$this->getAuthUserID())
-                ->select('estimate_items.id as id','estimate_items.name as name','estimate_items.price as price','maaps.name as maap','estimate_items.description as description')->get()->toArray();
+                ->select('estimate_items.id as id','estimate_items.name as name','estimate_items.price as price','maaps.name as maap','estimate_items.description as description','estimates.customer_name','estimates.customer_mobile','estimates.customer_address','estimates.customer_email','estimates.created_at','estimates.id as estimate_id')->get()->toArray();
                 foreach($qry as $q){
                     $q->id = encryptData($q->id);
                 }

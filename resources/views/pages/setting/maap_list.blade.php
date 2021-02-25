@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'estimate', 'titlePage' => __('Estimate'),'title' => 'Estimate'])
+@extends('layouts.app', ['activePage' => 'maap', 'titlePage' => __('Maap'),'title' => 'Maap'])
 
 @section('content')
 <div class="content">
@@ -7,9 +7,9 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-header card-header-primary">
-            <h4 class="card-title ">Estimate</h4>
-            <p class="card-category">Estimate List</p>
-            <a type="button" name="button" class="pull-right btn btn-success" id="addEstimateModalBtn" >+</a>
+            <h4 class="card-title ">Maap</h4>
+            <p class="card-category">Maap List</p>
+            <a type="button" name="button" class="pull-right btn btn-success" id="addMaapModalBtn" >+</a>
           </div>
 
           <div class="card-body">
@@ -23,13 +23,10 @@
                     Name
                   </th>
                   <th>
-                    Mobile
+                    Code
                   </th>
                   <th>
-                    Address
-                  </th>
-                  <th>
-                    Email
+                    Status
                   </th>
                   <th>
                     Action
@@ -181,33 +178,28 @@
   </div>
 </div>
 
-<div class="modal fade" id="addEstimateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addMaapModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Estimate</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Maap</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form action="" method="post" id="add_estimate_form">
+        <form action="" method="post" id="add_maap_form">
           <input type="hidden" id="id" name="id" value="0">
         <div class="form-group">
-          <label for="">Customer Name</label>
+          <label for="">Maap Name</label>
           <input type="text" name="name" id="name" class="form-control">
         </div>
         <div class="form-group">
-          <label for="">Customer Mobile</label>
-          <input type="text" name="mobile" id="mobile" class="form-control"  >
-        </div>
-        <div class="form-group">
-          <label for="">Customer Address</label>
-          <textarea class="form-control" name="address" id="address" rows="3"></textarea>
+          <label for="">Maap Code</label>
+          <input type="text" name="code" id="code" class="form-control"  >
         </div>
       </div>
       <div class="modal-footer">
-        
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Save changes</button>
       </div>
@@ -217,31 +209,28 @@
 </div>
 @push('js')
 <script>
-    function loadEstimateData(){
-      
+    function loadMaapData(){
+        
       $.ajax({
         headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
-        url : "{{route('estimate.get')}}",
+        url : "{{route('setting.maap.get')}}",
         type : "POST",
         success:function(res){
           if(res.IsSuccess){
             var html = "";
             var i = 1;
             if(res.Data.length > 0){
-                res.Data.forEach(estimate => {
+                res.Data.forEach(maap => {
                   html += `<tr>`;
                   html += `<td>${i}</td>`;
-                  html += `<td>${estimate.name}</td>`;
-                  html += `<td>${estimate.mobile}</td>`;
-                  html += `<td>${estimate.address}</td>`;
-                  html += `<td>${(estimate.email !== null)?estimate.email:'-'}</td>`;
+                  html += `<td>${maap.name}</td>`;
+                  html += `<td>${maap.code}</td>`;
+                  html += `<td>${maap.status}</td>`;
                   html += `<td>   
-                  <a type="button" class="p-2" style="cursor:pointer;" href="estimate/export/${estimate.id}" data-id="${estimate.id}"><i class="material-icons">picture_as_pdf</i></a>
-                  <a type="button" class="p-2" style="cursor:pointer;" href="/estimate/item/${estimate.id}"  ><i class="material-icons">keyboard_arrow_right</i></a>
-                  <a type="button" class="p-2" style="cursor:pointer;" onClick="updateEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">mode_edit</i></a>
-                  <a type="button" class="p-2" style="cursor:pointer;" onClick="deleteEstimate($(this).data('id'))" data-id="${estimate.id}" ><i class="material-icons">delete_forever</i></a>
+                  <a type="button" class="p-2" style="cursor:pointer;" onClick="updateMaap($(this).data('id'))" data-id="${maap.id}" ><i class="material-icons">mode_edit</i></a>
+                  <a type="button" class="p-2" style="cursor:pointer;" onClick="deleteMaap($(this).data('id'))" data-id="${maap.id}" ><i class="material-icons">delete_forever</i></a>
                   </td>`;
                   html += `</tr>`;
                   i++;
@@ -260,63 +249,62 @@
     function clearData(){
         $('#id').val(0);
         $('#name').val("");
-        $('#mobile').val("");
-        $('#address').val("");
+        $('#code').val("");
     }
 
-    function updateEstimate(id){
+    function updateMaap(id){
       $.ajax({
           headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           },
           data : "id="+id,
-          url: "{{ route('estimate.get.one') }}",
+          url: "{{ route('maap.get.one') }}",
           type: "POST",
           cache:false,
           success:function(res){
             if(res.IsSuccess){
                 $('#id').val(res.Data.id);
                 $('#name').val(res.Data.name);
-                $('#mobile').val(res.Data.mobile);
-                $('#address').val(res.Data.address);
-                $('#addEstimateModal').modal('show');
+                $('#code').val(res.Data.code);
+                $('#addMaapModal').modal('show');
             }else{
               md.showNotification('top','right','danger',res.ErrorMessage);
+              $('#addMaapModal').modal('hide');
             }
           }
       });
     }
 
-    function deleteEstimate(id){
-      $.ajax({
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data : "id="+id,
-            url: "{{ route('estimate.delete') }}",
-            type: "POST",
-            cache:false,
-            success:function(res){
-              if(res.IsSuccess){
-                md.showNotification('top','right','danger',res.SuccessMessage);  
-                loadEstimateData();
-              }else{
-                md.showNotification('top','right','danger',res.ErrorMessage);
-              }
-            }
-        })
-    }
+    // function deleteEstimate(id){
+    //   $.ajax({
+    //         headers: {
+    //           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         },
+    //         data : "id="+id,
+    //         url: "{{ route('estimate.delete') }}",
+    //         type: "POST",
+    //         cache:false,
+    //         success:function(res){
+    //           if(res.IsSuccess){
+    //             md.showNotification('top','right','danger',res.SuccessMessage);  
+    //             loadEstimateData();
+    //           }else{
+    //             md.showNotification('top','right','danger',res.ErrorMessage);
+    //           }
+    //         }
+    //     })
+    // }
 
     $(function(){
-      
+        
       // load Data with AJAX
-      loadEstimateData();
+      loadMaapData();
 
 
       // add new estimate
-      $('#addEstimateModalBtn').on('click',function(){
+      $('#addMaapModalBtn').on('click',function(){
         clearData();
-        $('#addEstimateModal').modal();
+        $('#addMaapModal').modal();
       });
 
     
@@ -324,50 +312,42 @@
       
       
 
-      // add estimate modal method start
-      $('#add_estimate_form').validate({
+      //add estimate modal method start
+      $('#add_maap_form').validate({
           rules: {
             name: "required",
-            mobile: {
-              required :true,
-              number: true,
-		          minlength: 10,
-		          maxlength: 10 
-            },
-            address : "required",
+            code: "required",
           },
           messages: {
-            name: "Please enter customer name",
-            mobile: {
-              required : "Please enter customer mobile",
-              number : "Number Only"
-            },
-            address:  "Please enter customer address",
+            name: "Please enter maap name",
+            code: "Please enter maap shortcode"
           },
           submitHandler: function(form,event) {
             event.preventDefault();
-            var formData = $('#add_estimate_form').serialize(); 
+            var formData = $('#add_maap_form').serialize(); 
+            console.log(formData);
             $.ajax({
               headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
               },
               data : formData,
-              url: "{{ route('estimate.store') }}",
+              url: "{{ route('maap.store') }}",
               type: "POST",
               cache:false,
               success:function(res){
                 if(res.IsSuccess){
-                  $('#addEstimateModal').modal('hide');
+                  $('#addMaapModal').modal('hide');
                   md.showNotification('top','right','success',res.SuccessMessage);
-                  loadEstimateData();
+                  loadMaapData();
+                  clearData();
                 }else{
-
+                  md.showNotification('top','right','danger',res.ErrorMessage);
+                  $('#addMaapModal').modal('hide');
                 }
               }
             });
           }
       })
-      // add estimate modal method end
     });
   
 </script>

@@ -10,4 +10,9 @@ class Maap extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = [
+        'name','code'
+    ];
+
 }

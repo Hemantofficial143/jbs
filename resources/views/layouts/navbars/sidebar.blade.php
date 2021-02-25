@@ -23,7 +23,7 @@
             <p>{{ __('Estimate') }}</p>
         </a>
       </li>
-      <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
+      <li class="nav-item {{ ($activePage == 'maap' || $activePage == 'maap') ? ' active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
           <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i>
           <p>{{ __('Laravel Examples') }}
@@ -57,8 +57,8 @@
         </a>
         <div class="collapse show" id="management">
           <ul class="nav">
-            <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
-              <a class="nav-link" >
+            <li class="nav-item{{ $activePage == 'm aap' ? 'maap' : '' }}">
+              <a class="nav-link" href="{{ route('setting.maap') }}">
                 <span class="sidebar-mini"> MP </span>
                 <span class="sidebar-normal">{{ __('Maap') }} </span>
               </a>
