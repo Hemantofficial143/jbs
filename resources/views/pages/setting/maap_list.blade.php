@@ -275,25 +275,25 @@
       });
     }
 
-    // function deleteEstimate(id){
-    //   $.ajax({
-    //         headers: {
-    //           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         },
-    //         data : "id="+id,
-    //         url: "{{ route('estimate.delete') }}",
-    //         type: "POST",
-    //         cache:false,
-    //         success:function(res){
-    //           if(res.IsSuccess){
-    //             md.showNotification('top','right','danger',res.SuccessMessage);  
-    //             loadEstimateData();
-    //           }else{
-    //             md.showNotification('top','right','danger',res.ErrorMessage);
-    //           }
-    //         }
-    //     })
-    // }
+    function deleteMaap(id){
+      $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data : "id="+id,
+            url: "{{ route('maap.delete') }}",
+            type: "POST",
+            cache:false,
+            success:function(res){
+              if(res.IsSuccess){
+                md.showNotification('top','right','danger',res.SuccessMessage);  
+                loadMaapData();
+              }else{
+                md.showNotification('top','right','danger',res.ErrorMessage);
+              }
+            }
+        })
+    }
 
     $(function(){
         

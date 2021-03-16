@@ -194,16 +194,20 @@
         <form action="" method="post" id="add_estimate_form">
           <input type="hidden" id="id" name="id" value="0">
         <div class="form-group">
-          <label for="">Customer Name</label>
+          <label for="name">Customer Name</label>
           <input type="text" name="name" id="name" class="form-control">
         </div>
         <div class="form-group">
-          <label for="">Customer Mobile</label>
+          <label for="mobile">Customer Mobile</label>
           <input type="text" name="mobile" id="mobile" class="form-control"  >
         </div>
         <div class="form-group">
-          <label for="">Customer Address</label>
+          <label for="address">Customer Address</label>
           <textarea class="form-control" name="address" id="address" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="">Estimate Note ( Seprate by Comma ',' )</label>
+          <textarea class="form-control" name="note" id="note" rows="3"></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -279,6 +283,7 @@
                 $('#name').val(res.Data.name);
                 $('#mobile').val(res.Data.mobile);
                 $('#address').val(res.Data.address);
+                $('#note').val(res.Data.note);
                 $('#addEstimateModal').modal('show');
             }else{
               md.showNotification('top','right','danger',res.ErrorMessage);

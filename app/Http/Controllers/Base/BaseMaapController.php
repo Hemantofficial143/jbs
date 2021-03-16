@@ -70,4 +70,11 @@ class BaseMaapController extends Controller
         return $this->response;
     }
 
+    public function deleteMaapData($id){
+        Maap::find(decryptData($id))->delete();
+        $this->response['IsSuccess'] = true;
+        return $this->response;
+    }
+
+
 }

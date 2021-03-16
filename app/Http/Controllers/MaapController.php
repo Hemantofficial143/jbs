@@ -102,9 +102,18 @@ class MaapController extends BaseMaapController
      * @param  \App\Models\Maap  $maap
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Maap $maap)
+    public function destroy(Request $request)
     {
-        //
+        $response = new ApiResponse();
+        $resData = $this->deleteMaapData($request->id);
+        if($resData['IsSuccess']){
+            $response->IsSuccess = true;
+            $response->SuccessMessage= "Maap Deleted Succesfully";
+        }else{
+            $response->ErrorMessage = @trans('common.some_went_wrong');
+        }
+        return $this->getJsonResponse($response);
+        
     }
 
     public function getAllData(){

@@ -160,7 +160,8 @@
             @foreach ($estimate['data'] as $e)
             <tr class="item">
                 <td>
-                    {{ ($e->name)?$e->name:'-' }}
+                        {{ ($e->name)?$e->name:'-' }} <br>
+                        <small> - {{ ($e->description)?$e->description:'-' }}</small>
                 </td>
                 
                 <td>
@@ -169,13 +170,25 @@
             </tr>    
             @endforeach
             <tr class="total">
-                <td></td>
-                
-                <td>
-                   
+                <td></td><td></td>
+            </tr>
+            @if($estimate['note'] != "")
+            <tr><td></td></tr>
+            <tr class="heading">
+                <td colspan="2">
+                    Note : 
                 </td>
             </tr>
+            <tr class="item">
+                <td colspan="2">
+                    @foreach (explode(',',$estimate['note']) as $sent)
+                        - {{$sent}}<br>
+                    @endforeach
+                </td>
+            </tr>
+            @endif
         </table>
+        
     </div>
 </body>
 </html>

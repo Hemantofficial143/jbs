@@ -90,15 +90,48 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
   Route::get('estimate/export/{id}','EstimateItemController@exportPdf')->name('estimate.export');
   
 
+  // customer routes
+  Route::group(['prefix' => 'customer'],function(){
+	Route::get('/','CustomerController@index')->name('customer.index');
+	Route::post('store','CustomerController@store')->name('customer.store');
+	Route::post('get','CustomerController@get')->name('customer.get');
+	Route::post('get/one','CustomerController@getOne')->name('customer.get.one');
+	Route::post('delete','CustomerController@destroy')->name('customer.delete');
+
+	// customer bills list route
+	Route::group(['prefix' => 'bills'],function(){
+		Route::get('{id}','BillController@index')->name('bill.index');
+		Route::post('store','BillController@store')->name('bill.store');
+		Route::post('update','BillController@update')->name('bill.update');
+		Route::post('get','BillController@get')->name('bill.get');
+		Route::post('get/one','BillController@getOne')->name('bill.get.one');
+		Route::post('delete','BillController@destroy')->name('bill.delete');
+	});
+
+	
+	
+  });
+
+  // bill routes
+  
+  
+
+  
+
+
   // jbs management routes start
 
 
   // maap routes
   Route::group(['middleware' => 'admin'],function(){
-	Route::get('/setting/maap','MaapController@index')->name('setting.maap');
-	Route::post('/setting/maap/get','MaapController@getAllData')->name('setting.maap.get');
-	Route::post('/setting/maap/get/one','MaapController@getOne')->name('maap.get.one');
-	Route::post('/setting/maap/store','MaapController@store')->name('maap.store');
+
+	Route::group(['prefix'=> 'setting'],function(){	
+		Route::get('/maap','MaapController@index')->name('setting.maap');
+		Route::post('/maap/get','MaapController@getAllData')->name('setting.maap.get');
+		Route::post('/maap/get/one','MaapC	ontroller@getOne')->name('maap.get.one');
+		Route::post('/maap/store','MaapController@store')->name('maap.store');
+		Route::post('/maap/delete','MaapController@destroy')->name('maap.delete');
+	});
 
   });
   

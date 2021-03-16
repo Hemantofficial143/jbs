@@ -136,6 +136,9 @@ class EstimateItemController extends BaseEstimateItemController
             if(!isset($estimates['customer_name'])){
                 $estimates['customer_name'] = $items->customer_name;
             }
+            if(!isset($estimates['note'])){
+                $estimates['note'] = $items->note;
+            }
             if(!isset($estimates['customer_email'])){
                 $estimates['customer_email'] = $items->customer_email;
             }
@@ -157,9 +160,12 @@ class EstimateItemController extends BaseEstimateItemController
             unset($items->customer_name);
             unset($items->customer_email);
             unset($items->customer_mobile);
+            unset($items->note);
             $estimates['data'][] = $items;
         }
-        $pdf = PDF::loadView('templates.estimate',['estimate' => $estimates]);
+        //return view('templates.estimate',['estimate' => $estimates]);
+        //dd($estimates);die;6
+       $pdf = PDF::loadView('templates.estimate',['estimate' => $estimates]);
         return $pdf->download($estimates['customer_name']."( ".$estimates['created_date']." ).pdf");
     }
 
