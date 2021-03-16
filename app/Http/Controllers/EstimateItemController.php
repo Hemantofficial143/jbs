@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Infrastructure\ApiResponse;
 use App\Http\Controllers\base\BaseEstimateItemController;
 use App\Models\Maap;
-
+use Barryvdh\DomPDF\Facade as PDF;
 class EstimateItemController extends BaseEstimateItemController
 {
     /**
@@ -126,6 +126,47 @@ class EstimateItemController extends BaseEstimateItemController
             $response->ErrorMessage = "Error While Fetching Data";
         }
         return $this->getJsonResponse($response);
+    }
+
+
+    public function exportPdf($id){
+        $estimateData = $this->getEstimateItemsData(['id' => $id]);
+        $estimates = [];
+        foreach($estimateData['data'] as $items){
+            if(!isset($estimates['customer_name'])){
+                $estimates['customer_name'] = $items->customer_name;
+            }
+            if(!isset($estimates['note'])){
+                $estimates['note'] = $items->note;
+            }
+            if(!isset($estimates['customer_email'])){
+                $estimates['customer_email'] = $items->customer_email;
+            }
+
+            if(!isset($estimates['customer_mobile'])){
+                $estimates['customer_mobile'] = $items->customer_mobile;
+            }
+            if(!isset($estimates['customer_address'])){
+                $estimates['customer_address'] = $items->customer_address;
+            }
+            if(!isset($estimates['created_at'])){
+                $estimates['created_date'] = $items->created_at;
+            }
+            if(!isset($estimates['estimate_id'])){
+                $estimates['estimate_id'] = $items->estimate_id;
+            }
+            unset($items->estimate_id);
+            unset($items->customer_address);
+            unset($items->customer_name);
+            unset($items->customer_email);
+            unset($items->customer_mobile);
+            unset($items->note);
+            $estimates['data'][] = $items;
+        }
+        //return view('templates.estimate',['estimate' => $estimates]);
+        //dd($estimates);die;6
+       $pdf = PDF::loadView('templates.estimate',['estimate' => $estimates]);
+        return $pdf->download($estimates['customer_name']."( ".$estimates['created_date']." ).pdf");
     }
 
 

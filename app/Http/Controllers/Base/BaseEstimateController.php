@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class BaseEstimateController extends Controller
 {
     public $response;
-    public $estimateAlias = ['id as id','customer_name as name','customer_mobile as mobile','customer_address as address','customer_email as email'];
+    public $estimateAlias = ['id as id','customer_name as name','customer_mobile as mobile','customer_address as address','customer_email as email','note'];
     public function __construct()
     {
         $this->response['IsSuccess'] = false;
@@ -21,7 +21,8 @@ class BaseEstimateController extends Controller
             'user_id' => $this->getAuthUserID(),
             'customer_name' => $data['name'],
             'customer_mobile' => $data['mobile'],
-            'customer_address' => $data['address']
+            'customer_address' => $data['address'],
+            'note' => isset($data['note'])?$data['note']:NULL
         ]);
         if($insert){
             $this->response['IsSuccess'] = true;
@@ -52,11 +53,13 @@ class BaseEstimateController extends Controller
     }
 
     public function updateEstimate($data,$getData = false){
+        
         $updatedData = Estimate::where('id',decryptData($data['id']))->update([
             'customer_name' => $data['name'],
             'customer_mobile' => $data['mobile'],
             'customer_address' => $data['address'],
             'customer_email' => isset($data['email'])?$data['email']:NULL,
+            'note' => isset($data['note'])?$data['note']:NULL,
         ]);
         $this->response['IsSuccess'] = true;
         if($getData){

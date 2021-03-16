@@ -4,7 +4,7 @@
         <ul>
             <li>
             <a href="https://www.creative-tim.com">
-                {{ __('Creative Tim') }}
+                {{ config('app.name') }}
             </a>
             </li>
             <li>
@@ -15,11 +15,6 @@
             <li>
             <a href="http://blog.creative-tim.com">
                 {{ __('Blog') }}
-            </a>
-            </li>
-            <li>
-            <a href="https://www.creative-tim.com/license">
-                {{ __('Licenses') }}
             </a>
             </li>
         </ul>
